@@ -27,12 +27,6 @@ class JobViewSet(viewsets.ModelViewSet):
         return Response({'status': 'success', 'is_active': job.is_active})
     
     @action(detail=False, methods=['get'])
-    def my_jobs(self, request):
-        jobs = Job.objects.filter(created_by=request.user)
-        serializer = self.get_serializer(jobs, many=True)
-        return Response(serializer.data)
-    
-    @action(detail=False, methods=['get'])
     def search(self, request):
         queryset = self.filter_queryset(self.get_queryset())
         
@@ -54,4 +48,15 @@ class JobViewSet(viewsets.ModelViewSet):
             return self.get_paginated_response(serializer.data)
         
         serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+    
+    @action(detail=False, methods=['get'])
+    def my_jobs(self, request):
+        jobs = Job.objects.filter(created_by=request.user)
+        page = self.paginate_queryset(jobs)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        
+        serializer = self.get_serializer(jobs, many=True)
         return Response(serializer.data)

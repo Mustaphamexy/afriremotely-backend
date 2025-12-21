@@ -1,6 +1,5 @@
+# applications/models.py
 from django.db import models
-from users.models import User
-from jobs.models import Job
 
 class Application(models.Model):
     STATUS_CHOICES = [
@@ -11,8 +10,9 @@ class Application(models.Model):
         ("hired", "Hired"),
     ]
     
-    job_seeker = models.ForeignKey(User, on_delete=models.CASCADE, related_name="job_applications")
-    job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name="applications")
+    # Use string references instead of direct imports
+    job_seeker = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name="job_applications")
+    job = models.ForeignKey('jobs.Job', on_delete=models.CASCADE, related_name="applications")
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="submitted")
     cover_letter = models.TextField(blank=True)
     resume_url = models.URLField(blank=True)

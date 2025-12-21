@@ -1,5 +1,5 @@
+# jobs/models.py
 from django.db import models
-from users.models import User
 
 class Job(models.Model):
     JOB_TYPES = [
@@ -11,7 +11,7 @@ class Job(models.Model):
         ("onsite", "Onsite"),
     ]
 
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_by = models.ForeignKey('users.User', on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     description = models.TextField()
     category = models.CharField(max_length=255)

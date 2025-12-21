@@ -6,6 +6,8 @@ from django.shortcuts import get_object_or_404
 from .models import Application
 from .serializers import ApplicationSerializer
 from jobs.models import Job
+from rest_framework import serializers
+
 
 class ApplicationViewSet(viewsets.ModelViewSet):
     serializer_class = ApplicationSerializer
