@@ -1,11 +1,25 @@
+# applications/serializers.py
 from rest_framework import serializers
 from .models import Application
-from jobs.serializers import JobSerializer
-from users.serializers import UserSerializer
+
+class SimpleUserSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    email = serializers.EmailField(read_only=True)
+    full_name = serializers.CharField(read_only=True)
+    role = serializers.CharField(read_only=True)
+    image_url = serializers.URLField(read_only=True)
+
+class SimpleJobSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    title = serializers.CharField(read_only=True)
+    company = serializers.CharField(read_only=True, source='created_by.full_name')
+    location = serializers.CharField(read_only=True)
+    job_type = serializers.CharField(read_only=True)
+    salary_range = serializers.CharField(read_only=True)
 
 class ApplicationSerializer(serializers.ModelSerializer):
-    job_seeker = UserSerializer(read_only=True)
-    job = JobSerializer(read_only=True)
+    job_seeker = SimpleUserSerializer(read_only=True)
+    job = SimpleJobSerializer(read_only=True)
     job_id = serializers.IntegerField(write_only=True)
     
     class Meta:

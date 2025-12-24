@@ -1,3 +1,4 @@
+# users/models.py
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 
@@ -15,6 +16,7 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('role', 'admin')
+        extra_fields.setdefault('is_active', True)
         
         if extra_fields.get('is_staff') is not True:
             raise ValueError('Superuser must have is_staff=True.')
@@ -23,7 +25,7 @@ class UserManager(BaseUserManager):
         
         return self.create_user(email, password, **extra_fields)
 
-class User(AbstractBaseUser, PermissionsMixin):
+class User(AbstractBaseUser, PermissionsMixin):  # Add PermissionsMixin
     ROLE_CHOICES = [
         ("job_seeker", "Job Seeker"),
         ("recruiter", "Recruiter"),
@@ -59,3 +61,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     def get_short_name(self):
         return self.full_name
+    
+    class Meta:
+        # Add verbose names
+        verbose_name = 'User'
+        verbose_name_plural = 'Users'

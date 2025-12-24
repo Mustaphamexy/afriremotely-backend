@@ -1,3 +1,4 @@
+# afriremotely/urls.py - Final version
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
@@ -13,4 +14,10 @@ urlpatterns = [
     path('api/users/', include('users.urls')),
     path('api/jobs/', include('jobs.urls')),
     path('api/applications/', include('applications.urls')),
+    path('api/match/', include('matching.urls')),
+    
+    # Health check
+    path('api/', include([
+        path('health/', lambda request: JsonResponse({'status': 'ok'}), name='health-check'),
+    ])),
 ]
